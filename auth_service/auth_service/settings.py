@@ -124,7 +124,7 @@ JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_LEEWAY': 0,
     # Set jwt access token expiration delta to 1 minute
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=300),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=6000),
     'JWT_AUDIENCE': None,
     'JWT_ISSUER': None,
 
@@ -132,7 +132,7 @@ JWT_AUTH = {
     # Set jwt access token expiration delta to 1 day
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
 
-    'JWT_AUTH_HEADER_PREFIX': 'CIRCLE',
+    'JWT_AUTH_HEADER_PREFIX': 'AUTH',
     'JWT_AUTH_COOKIE': None,
 
 }

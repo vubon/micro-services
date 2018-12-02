@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import F
+from django.utils import timezone
 
 from applibs.auth_service import AuthService
 
@@ -12,16 +14,53 @@ class FamilyMemberManager(models.Manager):
         :param request_data:
         :return:
         """
-        res = auth.user_info_collection(request_data)
+        res, status_code = auth.user_info_collection(request_data)
+
+        if 500 <= status_code <= 599:
+            return res, status_code
+
+        if 400 <= status_code <= 499:
+            return res, status_code
+
+        filter_data = self.filter(request_made_by=res['sender_phone'], request_sent_to=res['rcv_phone'])
+
+        if filter_data.exists():
+            message = {"error_msg": "Relation already exists"}
+            status_code = 400
+            return message, status_code
+
         self.create(
             request_made_by=res['sender_phone'],
             request_sent_to=res['rcv_phone'],
             sender_full_name=res['sender_name'],
-            receiver_full_name=res['rcv_name']
+            receiver_full_name=res['rcv_name'],
+            created_at=timezone.now()
         )
         message = {"success": "Success"}
         status_code = 201
         return message, status_code
+
+    def family_member_list(self, request_data: dict) -> tuple:
+        """
+        :param request_data:
+        :return:
+        """
+        res, status_code = auth.token_validation(request_data)
+
+        if 500 <= status_code <= 599:
+            return res, status_code
+
+        if 400 <= status_code <= 499:
+            return res, status_code
+
+        return self.filter(
+            request_made_by=res['phone_number']
+        ).annotate(
+            rcv_phone=F('request_sent_to'),
+            rcv_name=F('receiver_full_name'),
+        ).values(
+            'rcv_phone', 'rcv_name', 'created_at', 'is_active'
+        ), 200
 
 
 class FamilyMember(models.Model):

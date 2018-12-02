@@ -3,7 +3,7 @@ import logging
 from rest_framework_jwt.settings import api_settings
 from rest_framework_jwt.serializers import RefreshJSONWebTokenSerializer
 
-# token_decode = api_settings.JWT_DECODE_HANDLER
+token_decode = api_settings.JWT_DECODE_HANDLER
 encode_handler = api_settings.JWT_ENCODE_HANDLER
 
 # # Configure logging
@@ -20,16 +20,14 @@ class RefreshToken:
         :param token:
         :return:
         """
-
         try:
-            res = self.serializer.validate(token)
+            res = self.serializer.validate({"token": token['token'].split(' ')[1]})
         except Exception as e:
+            print(e)
             # logger.debug('Internal get user refresh token {}'.format(e))
             return False
 
         if 'token' in res.keys():
-            new_token = res['token']
-            final_token = encode_handler(new_token)
-            return final_token
+            return res['token']
 
         return False

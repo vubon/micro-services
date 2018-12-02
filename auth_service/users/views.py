@@ -22,7 +22,8 @@ class SignUpView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            user = User.objects.create(username=request.data['username'])
+            user = User.objects.create(username=request.data['username'], first_name=request.data['first_name'],
+                                       last_name=request.data['last_name'])
             user.set_password(request.data['password'])
             user.save()
             return Response({"msg": "Success"}, status=status.HTTP_201_CREATED)
@@ -43,7 +44,7 @@ class TokenValidation(APIView):
         new_token = refresh_token.token_validation({"token": request.data['user_token']})
 
         if not new_token:
-            return Response("Invalid Token", status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error_msg": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST)
 
         # decode new token
         decoded_token = token_decode(new_token)
@@ -60,6 +61,11 @@ class UserValidation(APIView):
     """
         URL: /api/v1/user-validation/
         Method: POST
+
+        {
+            "user_token": "token',
+            "rcv_phone": "mobile number"
+        }
     """
     permission_classes = ()
     authentication_classes = ()

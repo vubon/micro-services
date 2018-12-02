@@ -25,7 +25,7 @@ SECRET_KEY = '-jx%)8&h26ec)3o7hs_bg@-j**l-uk6#(f9$sm@%)81b!68u(b'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'friends_and_family.middleware.TokenValidation'
 ]
 
 ROOT_URLCONF = 'friends_and_family.urls'
