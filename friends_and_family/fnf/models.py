@@ -45,22 +45,22 @@ class FamilyMemberManager(models.Manager):
         :param request_data:
         :return:
         """
-        res, status_code = auth.token_validation(request_data)
-
-        if 500 <= status_code <= 599:
-            return res, status_code
-
-        if 400 <= status_code <= 499:
-            return res, status_code
+        # res, status_code = auth.token_validation(request_data)
+        #
+        # if 500 <= status_code <= 599:
+        #     return res, status_code
+        #
+        # if 400 <= status_code <= 499:
+        #     return res, status_code
 
         return self.filter(
-            request_made_by=res['phone_number']
+            request_made_by=request_data['phone_number']
         ).annotate(
             rcv_phone=F('request_sent_to'),
             rcv_name=F('receiver_full_name'),
         ).values(
             'rcv_phone', 'rcv_name', 'created_at', 'is_active'
-        ), 200
+        )
 
 
 class FamilyMember(models.Model):

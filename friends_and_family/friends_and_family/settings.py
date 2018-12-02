@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'friends_and_family.middleware.TokenValidation'
+    # 'friends_and_family.middleware.TokenValidation'
 ]
 
 ROOT_URLCONF = 'friends_and_family.urls'

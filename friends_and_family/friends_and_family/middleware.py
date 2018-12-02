@@ -62,5 +62,7 @@ class TokenValidation:
         if 400 <= status_code <= 499:
             response['error_msg'] = res
             response['status_code'] = status_code
+        if 200 <= status_code <= 299:
+            response['user_data'] = res
 
         return response

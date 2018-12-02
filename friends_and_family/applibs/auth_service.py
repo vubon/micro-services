@@ -14,7 +14,7 @@ class AuthService:
         """
         try:
             response = requests.post(token_validation_url, json=token)
-            if response.status_code == 200:
+            if 200 <= response.status_code <= 299:
                 return response.json(), response.status_code
             elif 400 <= response.status_code <= 499:
                 return response.json(), response.status_code
