@@ -1,6 +1,6 @@
 django>=1.11.19
 django-cors-headers==2.1.0
-djangorestframework==3.9.0
+djangorestframework>=3.11.2
 djangorestframework-jwt==1.11.0
 PyJWT==1.7.0
 pytz==2018.7
